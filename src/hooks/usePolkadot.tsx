@@ -7,7 +7,7 @@ import {
   useReducer,
   useState
 } from 'react'
-import { ApiPromise, Keyring, WsProvider } from '@polkadot/api'
+import { ApiPromise, WsProvider } from '@polkadot/api'
 import {
   web3Enable,
   web3Accounts,
@@ -21,6 +21,7 @@ import {
   signatureVerify
 } from '@polkadot/util-crypto'
 import { AccountInfo } from '@polkadot/types/interfaces'
+import { stringToHex } from '@polkadot/util'
 
 export type Account = {
   address: string
@@ -294,11 +295,20 @@ export const PolkadotProvider = ({
 
   const signMessage = async (message: string) => {
     // TODO: add logic to sign message
-    // TODO: add seed phrase
-    const seed = ''
-    const tempAccount = new Keyring({ type: 'sr25519' }).addFromUri(seed)
+    const tempAccount = await web3Accounts().then((accounts) => accounts[0])
 
-    const signature = tempAccount.sign(message)
+    const injector = await web3FromSource(tempAccount.meta.source)
+    const signRaw = injector?.signer?.signRaw
+
+    if (!signRaw) {
+      throw new Error('Sign raw not available')
+    }
+
+    const { signature } = await signRaw({
+      address: tempAccount.address,
+      data: stringToHex(message),
+      type: 'bytes'
+    })
 
     const { isValid } = signatureVerify(message, signature, tempAccount.address)
 
