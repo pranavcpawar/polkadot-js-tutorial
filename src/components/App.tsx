@@ -2,7 +2,7 @@ import { usePolkadot } from 'hooks/usePolkadot'
 import Header from './Header'
 import AccountInfo from './Account'
 import GetRPC from './GetRPC'
-// import Transfer from './Transfer'
+import Transfer from './Transfer'
 import { Toaster } from 'sonner'
 // import Sign from './Sign'
 
@@ -19,8 +19,8 @@ function App() {
           Polkadot-JS API Tutorial
         </h3>
       </div>
-      {/* <Sign />
-      <Transfer /> */}
+      {/* <Sign /> */}
+      <Transfer />
       <div className="flex flex-1 flex-col place-items-start items-center justify-start gap-4">
         {isRPC ? (
           <AccountInfo

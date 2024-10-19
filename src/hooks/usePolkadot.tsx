@@ -8,7 +8,11 @@ import {
   useState
 } from 'react'
 import { ApiPromise, Keyring, WsProvider } from '@polkadot/api'
-import { web3Enable, web3Accounts } from '@polkadot/extension-dapp'
+import {
+  web3Enable,
+  web3Accounts,
+  web3FromSource
+} from '@polkadot/extension-dapp'
 import { InjectedAccountWithMeta } from '@polkadot/extension-inject/types'
 import { TypeRegistry } from '@polkadot/types'
 import {
@@ -259,9 +263,10 @@ export const PolkadotProvider = ({
 
   const transferFunds = async (user: User, rpc: string) => {
     // TODO: add logic to transfer funds
-    // TODO: add seed phrase
     const api = await initPolkadotAPI(rpc)
     const transferAmount = user.amount * 10 ** account.decimals!
+    const allAccounts = await web3Accounts()
+    const firstAccount = allAccounts[0]
 
     const balance = Number(
       (
@@ -274,10 +279,9 @@ export const PolkadotProvider = ({
         user.address,
         transferAmount.toString()
       )
-      // add seed phrase
-      const seed = ''
-      const hash = await transfer?.signAndSend(seed, {
-        withSignedTransaction: true
+      const injector = await web3FromSource(firstAccount.meta.source)
+      const hash = await transfer?.signAndSend(firstAccount.address, {
+        signer: injector.signer
       })
 
       if (hash) {
