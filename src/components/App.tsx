@@ -19,8 +19,8 @@ function App() {
           Polkadot-JS API Tutorial
         </h3>
       </div>
-      <Sign />
-      <Transfer />
+      {/* <Sign />
+      <Transfer /> */}
       <div className="flex flex-1 flex-col place-items-start items-center justify-start gap-4">
         {isRPC ? (
           <AccountInfo
