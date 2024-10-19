@@ -2,9 +2,9 @@ import { usePolkadot } from 'hooks/usePolkadot'
 import Header from './Header'
 import AccountInfo from './Account'
 import GetRPC from './GetRPC'
-import Transfer from './Transfer'
+// import Transfer from './Transfer'
 import { Toaster } from 'sonner'
-import Sign from './Sign'
+// import Sign from './Sign'
 
 function App() {
   // TODO
